@@ -1,3 +1,8 @@
+provider "google" {
+  project = "long-grin-378416"
+  region  = "europe-west3"
+}
+
 # Create the Virtual Private Cloud (VPC) network and subnet for the VM's network interface
 resource "google_compute_network" "vpc_network" {
   name                    = "my-custom-mode-network"
@@ -8,7 +13,7 @@ resource "google_compute_network" "vpc_network" {
 resource "google_compute_subnetwork" "default" {
   name          = "my-custom-subnet"
   ip_cidr_range = "10.0.1.0/24"
-  region        = "us-west1"
+  region        = "europe-west3"
   network       = google_compute_network.vpc_network.id
 }
 
@@ -16,22 +21,18 @@ resource "google_compute_subnetwork" "default" {
 resource "google_compute_instance" "default" {
   name         = "flask-vm"
   machine_type = "f1-micro"
-  zone         = "us-west1-a"
-  tags         = ["critical"]
+  zone         = "europe-west3-a"
+  tags         = ["critical", "ssh"]
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11"
+      image = "critical-app-python-debian" # TODO: use the custome image containing the OS and application
     }
   }
 
-  metadata = {
-    # TODO: Make script that installes and runs basic flask app that reads from a csv file
-    startup-script-url = "gs://critical-app-startup-scripts/critical-app-startup.sh"
-  }
-
   # Install Flask
-  # metadata_startup_script = "sudo apt-get update; sudo apt-get install -yq build-essential python3-pip rsync; pip install flask; touch app.py"
+  metadata_startup_script = "cd dummy-critical-app; gunicorn --bind :8000 -w 4 'app:app' --daemon"
+
 
   network_interface {
     subnetwork = google_compute_subnetwork.default.id
@@ -41,3 +42,32 @@ resource "google_compute_instance" "default" {
     }
   }
 }
+
+resource "google_compute_firewall" "ssh" {
+  name = "allow-ssh"
+  allow {
+    ports    = ["22"]
+    protocol = "tcp"
+  }
+  direction     = "INGRESS"
+  network       = google_compute_network.vpc_network.id
+  priority      = 1000
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["ssh"]
+}
+
+resource "google_compute_firewall" "flask" {
+  name    = "flask-app-firewall"
+  network = google_compute_network.vpc_network.id
+
+  allow {
+    protocol = "tcp"
+    ports    = ["8000"]
+  }
+  source_ranges = ["0.0.0.0/0"]
+}
+
+# Create an image
+# Create a disk snapshot of interesting data (think about the specifics of the Inges database)
+# Do I work with images + snashots
+# Or just snapshots

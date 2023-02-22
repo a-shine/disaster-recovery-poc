@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo apt-get update
-sudo apt-get install -yq build-essential python3-pip rsync
+sudo apt-get install -yq build-essential python3-pip
 
 pip install flask
 
