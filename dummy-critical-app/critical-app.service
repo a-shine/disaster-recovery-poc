@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve my dummy critical application
+After=network.target
+
+[Service]
+User=alex
+Group=www-data
+WorkingDirectory=/home/alex/disaster-recovery-poc/dummy-critical-app
+Environment="PATH=/home/alex/disaster-recovery-poc/dummy-critical-app/venv/bin"
+ExecStart=/home/alex/disaster-recovery-poc/dummy-critical-app/venv/bin/gunicorn --workers 4 --bind :8000 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

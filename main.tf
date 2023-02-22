@@ -30,8 +30,7 @@ resource "google_compute_instance" "default" {
     }
   }
 
-  # Install Flask
-  metadata_startup_script = "cd dummy-critical-app; gunicorn --bind :8000 -w 4 'app:app' --daemon"
+  # metadata_startup_script = ""
 
 
   network_interface {
