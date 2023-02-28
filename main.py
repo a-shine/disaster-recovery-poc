@@ -1,5 +1,7 @@
+import recovery_mechanism
+
 if __name__ == "__main__":
-    print("Hello world")
+    recovery_mechanism.recover_critical_workload("some critical workload")
 
 
 # Dual mode redundancy
@@ -17,3 +19,6 @@ if __name__ == "__main__":
 # Supprimer le workload non critique
 # Récupérer la réservation et l’associer à un projet cible
 # Déployer la prod dans le projet & la nouvelle région up
+
+
+# Ask infra practice lead - talk to a consultant
