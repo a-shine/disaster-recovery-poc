@@ -1,12 +1,26 @@
 # Disaster recovery PoC
 
-Use a number of views counter flask app and then when a disaster occurs don't lose the number of views when recovering - good case study
+This Proof of Concept (PoC) repository demonstrates how VM reservations can be used in order to ensure capacity in the event of a disaster. Furthermore, in an effort to use reserved capacity in a more cost-effective way we attempt to demonstrate how idle reserved capacity can be utilized by non-critical workloads (e.g. dev/staging/pre-production environments) and then replaced with critical workloads as part of a Disaster Recovery Plan (DRP).
 
-<!-- TODO: Create a terra for a non-critical app -->
-<!-- TODO: Look into terra reservation affinity -->
-<!-- TODO: Look at creating vm from snapshot not image - clarify this with the team (where is the state stored? On the hard drive bundled with the whole OS or is it a seperate bucket for the state?) -->
+The `dummy-critical-app` is a Python Flask application which records the amount of page views in a `count.txt` file (gives a sense of persistent state). The Gunicorn server hosting the application is a daemon process registered with `systemd` to manage the process on startup. The whole configuration is recorded in the base `critical-app-python-debian` image.
+
+The `dummy-non-critical-app` is a simple 'Hello world!' Flask application with an open SSH firewall policy for development.
+
+
+
+<!-- Use a number of views counter flask app and then when a disaster occurs don't lose the number of views when recovering - good case study -->
+
 <!-- TODO: Create mechanism/python script to remove non-critical workload (look at tag) with the same machine type from one region and replace it with the workload critical workload of another region  -->
 
 <!-- Theres two things to look into here: what happens with the state? How to ensure that we can maintain a similar state e.g. similar view count without loosing too much? -> turboreplication every n hours? Other question is the automation of moving critical from one region, and replacing non-critical in the other region -->
 
-Don't need to have a database of machine types for critical and non-critical workloads as the data is all in the terraform in any case
+Demo path:
+- Intro
+    - Show critical application running in region
+    - Show non-critical application running in region
+    - Show 100% reservation utilization
+- Disaster strikes
+    - Take down non-critical application running in region designated for disaster recovery
+    - Migrate the critical application to the disaster recovery region by enabling the tfvars
+    - Show the critical application running
+    - Show 100% reservation utilization

@@ -27,7 +27,7 @@ resource "google_compute_instance" "default" {
 
   boot_disk {
     initialize_params {
-      image = "critical-app-python-debian" # TODO: use the custome image containing the OS and application
+      image = "critical-app-python-debian" # TODO: look at using latest snapshot
     }
   }
 
