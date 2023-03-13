@@ -1,0 +1,3 @@
+project,workload,tags,region,zone,instance_type
+bustling-psyche-378416,dummy-non-critical-app,"['non-critical', 'ssh']",europe-west4,europe-west4-a,e2-medium
+long-grin-378416,dummy-critical-app,"['critical']",europe-west3,europe-west3-a,e2-large

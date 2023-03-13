@@ -14,7 +14,7 @@ The `dummy-non-critical-app` is a simple 'Hello world!' Flask application with a
 
 <!-- Theres two things to look into here: what happens with the state? How to ensure that we can maintain a similar state e.g. similar view count without loosing too much? -> turboreplication every n hours? Other question is the automation of moving critical from one region, and replacing non-critical in the other region -->
 
-Demo path:
+Demo v1 path:
 - Intro
     - Show critical application running in region
     - Show non-critical application running in region
@@ -24,3 +24,15 @@ Demo path:
     - Migrate the critical application to the disaster recovery region by enabling the tfvars
     - Show the critical application running
     - Show 100% reservation utilization
+
+
+Next steps:
+- How to identify critical workloads in a region and match them with non-critical workloads in another region (with reserved capacity)
+
+
+Prevent people from creating VMs in a region when their is a disaster recovery status??
+
+You could simply:
+Turn off automatic reservation in the case of a disaster -> hardcode the reservation to take 
+
+<!-- Rule in the centralized VM management system to prevent creation of VMs in the region where DR is occurring with reservation -->
