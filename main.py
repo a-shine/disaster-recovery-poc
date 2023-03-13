@@ -1,15 +1,8 @@
-import recovery_mechanism
+import matching_mechanism
 
 if __name__ == "__main__":
-    recovery_mechanism.recover_critical_workload("some critical workload")
+    matching_mechanism.recover_critical_workload("some critical workload")
 
-
-# Dual mode redundancy
-# Listen to service + database -> ping server ip and database liveness route
-# Listen to GCP status (seperate threads)
-# If both return failure -> bring up a workload with terraform
-
-# have multiple regions running this server with ring leader election
 
 # Disaster alerting system
 # Automated DR implementation - mechanism to destroy (make sure current prod system is down + destroy non-critical workloads), then bring up new system, update data and then change DNS
@@ -18,7 +11,4 @@ if __name__ == "__main__":
 # PoC (proof of concept MVP)
 # Supprimer le workload non critique
 # Récupérer la réservation et l’associer à un projet cible
-# Déployer la prod dans le projet & la nouvelle région up
-
-
-# Ask infra practice lead - talk to a consultant
+# Déployer la prod dans le projet & la nouvelle région up (mettre a jour le DNS)
