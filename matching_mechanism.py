@@ -104,41 +104,39 @@ def region_to_many_recovery(disaster_region):
     all_non_critical_workloads = get_all_non_critical_workloads_regional_disaster(
         disaster_region)
 
-    print("Mapping critical workloads in the disaster region to non-critical workloads in the recovery regions")
+    print("\n")
+    print("All possible mappings of critical workloads in the disaster region to non-critical workloads in recovery regions")
     mapped_workloads = possible_workload_mapping(disaster_region_critical_workloads,
                                                  all_non_critical_workloads)
     print(mapped_workloads.head())
 
-    # Modify the dataframe to include one unique critical workload to non-critical workload mapping
-    # for each row - if the workload has been matched remove any other matches
-    # from the dataframe
-    # mapped_workloads = mapped_workloads.drop_duplicates(
-    #     subset=['project_y'], keep='first')
-    # print(mapped_workloads.head())
-
     # First let us identify all unmappable critical workloads
-    print("Warning the following critical workloads in the disaster region do not have a match in any recovery region")
-    # unmapped_workloads = unmappable_critical_workloads(
-    # disaster_region_critical_workloads, recovery_region_non_critical_workloads)  # BUG: fix this
-    # print(unmapped_workloads)
+    print("\n")
+    print("WARNING: The following critical workloads in the disaster region do not have a match in any recovery region")
+    unmapped_workloads = unmappable_critical_workloads(
+        disaster_region_critical_workloads, all_non_critical_workloads)
+    print(unmapped_workloads)
 
     new_mapped_workloads = pd.DataFrame()
-    # BUG: its the for loop that is causing the issue as mapped_workloads is being modified
     # BUG: Add the notion of correct machine type + if there is no match for the machine type
     for critical_workload in mapped_workloads['project_x'].unique():
-        # find the first match for the critical workload
+        # Find the first critical workload in the mapped workloads dataframe
         first_match = mapped_workloads.loc[mapped_workloads['project_x']
                                            == critical_workload].iloc[0]
-        # add the first match to the new dataframe
+
+        # Add the first match to the new dataframe
         new_mapped_workloads = new_mapped_workloads.append(first_match)
-        # remove the first match from the original dataframe
+        # TODO: Replace this with pd.concat
+
+        # Remove the first match from the original dataframe
         mapped_workloads = mapped_workloads[mapped_workloads['project_x']
                                             != critical_workload]
-        # remove any other other rows containing the same project_y
-        # print(first_match['project_y'])
-        # print(mapped_workloads.head())
+
+        # Remove any other other rows containing the same project_y (as this
+        # non-critical workload has already been mapped)
         mapped_workloads = mapped_workloads[mapped_workloads['project_y']
                                             != first_match['project_y']]
-        # print(mapped_workloads.head())
 
-    print(new_mapped_workloads.head())  # THIS WORKS! (I think)
+    print("\n")
+    print("The following critical workloads in the disaster region have been mapped to non-critical workloads in recovery regions")
+    print(new_mapped_workloads.head())

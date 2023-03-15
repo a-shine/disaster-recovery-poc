@@ -84,14 +84,19 @@ Configure three projects in GCP to be used:
     - Show the critical application running
     - Show 100% reservation utilization
 
-Open question: How to prevent people from creating VMs in a region when there is a disaster recovery status?
+## Open questions
 
-- Turn off automatic reservation in the case of a disaster -> hardcode the reservation to take
-- Rule in the centralized VM management system to prevent creation of VMs in the region where DR is occurring with reservation
-- Explore edge case where there are no non-critical workloads in the recovery region (try another region)
+- How to prevent people from creating VMs in a region when there is a disaster
+  recovery status?
+  - Turn off automatic reservation in the case of a disaster (hardcode the
+    reservation to be taken on a workload by workload basis)
+  - Rule in the centralized VM management system to prevent creation of VMs in
+    the region where DR is occurring with reservation
+- Explore edge case where there are no non-critical workloads in the recovery
+  region (try another region)
 
-FEATURE: DO THIS AS TOP PRIORITY (not python script)
-
-1. Have a terraform for the non-critical workloads
-
-2. and show that you can destroy non-critical with terraform destroy, replace reservation by applying critical terraform with terrorm apply
+<!--
+PoC (proof of concept MVP)
+Supprimer le workload non critique
+Récupérer la réservation et l’associer à un projet cible
+Déployer la prod dans le projet & la nouvelle région up (mettre a jour le DNS) -->

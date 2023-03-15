@@ -3,3 +3,4 @@ bustling-psyche-378416,non-critical-app-a,"['non-critical', 'ssh']",europe-west4
 vegy-animal-378416,non-critical-app-b,"['non-critical', 'ssh']",europe-west1,europe-west1-a,e2-medium
 long-grin-378416,critical-app-a,"['critical']",europe-west3,europe-west3-a,e2-medium
 angry-duck-378416,critical-app-b,"['critical']",europe-west3,europe-west3-a,e2-medium
+pompous-frog-378416,critical-app-c,"['critical']",europe-west3,europe-west3-a,e2-large
