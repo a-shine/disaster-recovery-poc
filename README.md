@@ -1,4 +1,4 @@
-# Disaster recovery PoC
+# Disaster recovery with dynamic reservation strategy PoC
 
 This Proof of Concept (PoC) repository demonstrates how VM reservations can be
 used to ensure capacity in the event of a disaster while minimising costs. We

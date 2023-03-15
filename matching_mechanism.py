@@ -96,6 +96,7 @@ def region_to_region_recovery(disaster_region, recovery_region):
     print(unmapped_workloads)
 
 
+# TODO: A better way to do this is as a constraint satisfaction problem using a backtracking algorithm
 def region_to_many_recovery(disaster_region):
     '''Identify and match workloads in the disaster region to all non-critical workloads'''
     disaster_region_critical_workloads = get_critical_workloads_in_region(
@@ -115,6 +116,12 @@ def region_to_many_recovery(disaster_region):
     #     subset=['project_y'], keep='first')
     # print(mapped_workloads.head())
 
+    # First let us identify all unmappable critical workloads
+    print("Warning the following critical workloads in the disaster region do not have a match in any recovery region")
+    # unmapped_workloads = unmappable_critical_workloads(
+    # disaster_region_critical_workloads, recovery_region_non_critical_workloads)  # BUG: fix this
+    # print(unmapped_workloads)
+
     new_mapped_workloads = pd.DataFrame()
     # BUG: its the for loop that is causing the issue as mapped_workloads is being modified
     # BUG: Add the notion of correct machine type + if there is no match for the machine type
@@ -128,15 +135,10 @@ def region_to_many_recovery(disaster_region):
         mapped_workloads = mapped_workloads[mapped_workloads['project_x']
                                             != critical_workload]
         # remove any other other rows containing the same project_y
-        print(first_match['project_y'])
-        print(mapped_workloads.head())
+        # print(first_match['project_y'])
+        # print(mapped_workloads.head())
         mapped_workloads = mapped_workloads[mapped_workloads['project_y']
                                             != first_match['project_y']]
-        print(mapped_workloads.head())
+        # print(mapped_workloads.head())
 
     print(new_mapped_workloads.head())  # THIS WORKS! (I think)
-
-    print("Warning the following critical workloads in the disaster region do not have a match in the recovery region")
-    unmapped_workloads = unmappable_critical_workloads(
-        disaster_region_critical_workloads, recovery_region_non_critical_workloads)  # BUG: fix this
-    print(unmapped_workloads)
