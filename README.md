@@ -66,17 +66,19 @@ Configure three projects in GCP to be used:
 
 ### Demo path
 
+<!-- for tmr (do intro + workload migration and then show workload identification and matching) -->
+
 - Intro
   - Show critical application running in its region (demonstrate in browser +
     VM console)
   - Show non-critical application running in its region (VM consoles)
-  - Show 100% reservation utilization in reservation mother project
+  - Show 100% reservation utilization in reservation mother project (show the two associated projects)
 - Disaster strikes!
   - Workload identification and matching
     - Show the matching mechanism script with valid matching workloads
       - Go through each of the functions - focus on the highest level region_to_region and region_to_many recovery
     - Also show identification of unmatched critical workloads
-  - Workload migration
+  - Workload migration (prove that we get to use the reserved capacity)
     - Take down non-critical application running in region designated for
       disaster recovery
     - Migrate the critical application to the disaster recovery region by enabling
