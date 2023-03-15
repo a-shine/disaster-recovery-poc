@@ -1,7 +1,7 @@
 import matching_mechanism
 
 if __name__ == "__main__":
-    matching_mechanism.recover_critical_workload("some critical workload")
+    matching_mechanism.region_to_many_recovery("europe-west3")
 
 
 # Disaster alerting system

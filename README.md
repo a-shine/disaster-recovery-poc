@@ -3,23 +3,24 @@
 This Proof of Concept (PoC) repository demonstrates how VM reservations can be
 used to ensure capacity in the event of a disaster while minimising costs. We
 attempt to demonstrate how idle reserved capacity can be utilized by
-non-critical workloads (e.g. dev, staging, pre-production environments) and then
-replaced with critical workloads as part of a Disaster Recovery Plan (DRP).
+non-critical workloads (e.g. dev, staging, pre-production environments) and
+then replaced with critical workloads as part of a Disaster Recovery Plan (DRP).
 
-**High level strategy overview**
+**Highest-level DR strategy overview**
 
-- Detect/disaster alert mechanism (using dual mode redundancy)
-- Workload matching mechanism - how to identify critical workloads in a disaster
-  region and match them with non-critical workloads in another recovery region
-  (with reserved capacity)
-- Workload migration and reservation usage mechanism
+1. Detect disaster and alert (using dual mode redundancy to reduce false
+   positives)
+2. Workload matching mechanism - how to identify critical workloads in a
+   disaster region and match them with non-critical workloads in another
+   recovery region (with reserved capacity)
+3. Workload migration and reservation usage mechanism
 
 **Out of scope**
 
 - The specifics of the application and automated deployment/IaC tooling
 - The specifics of the database of running workloads (BQ, Asset inventory,
-  gcloud API, self-managed database...)
-- The specifics of how the application and application data is backedup (which
+  `gcloud` API, self-managed database...)
+- The specifics of how the application and application data is backed-up (which
   will affect your RPO)
   <!-- TODO: This needs to be looked into further? Using Turboreplication to
   maintain freshness of backups across regions -->
@@ -71,8 +72,10 @@ Configure three projects in GCP to be used:
   - Show non-critical application running in its region (VM consoles)
   - Show 100% reservation utilization in reservation mother project
 - Disaster strikes!
-
   - Workload identification and matching
+    - Show the matching mechanism script with valid matching workloads
+      - Go through each of the functions - focus on the highest level region_to_region and region_to_many recovery
+    - Also show identification of unmatched critical workloads
   - Workload migration
     - Take down non-critical application running in region designated for
       disaster recovery
@@ -85,3 +88,10 @@ Open question: How to prevent people from creating VMs in a region when there is
 
 - Turn off automatic reservation in the case of a disaster -> hardcode the reservation to take
 - Rule in the centralized VM management system to prevent creation of VMs in the region where DR is occurring with reservation
+- Explore edge case where there are no non-critical workloads in the recovery region (try another region)
+
+FEATURE: DO THIS AS TOP PRIORITY (not python script)
+
+1. Have a terraform for the non-critical workloads
+
+2. and show that you can destroy non-critical with terraform destroy, replace reservation by applying critical terraform with terrorm apply
