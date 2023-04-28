@@ -9,6 +9,7 @@ dummy-critical-app/count.txt
 #############
 
 venv/
+__pycache__/
 
 
 #############

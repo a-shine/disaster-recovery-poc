@@ -5,6 +5,8 @@ a non-critical workload in a recovery region with an equivalent machine type'''
 import pandas as pd
 from ast import literal_eval
 
+# TODO: Explore non-binary criticality (e.g. critical, non-critical, low-priority) - turned into a constraint satisfaction problem
+
 # Assume that all capacity is used with reservations ( each workload is
 # associated with a reservation). The aim is to maximise reservation
 # utilisation in order to minimise cost of idle reserved capacity.
@@ -16,7 +18,7 @@ from ast import literal_eval
 # Read the CSV file into a Pandas Dataframe
 # In practice this could be the GCP API, Cloud Asset Inventory, BQ or another
 # database...
-df = pd.read_csv("workloads.csv")
+df = pd.read_csv("example_workload_db.csv")
 
 # Convert the tags list string column to a list
 df['tags'] = df['tags'].apply(lambda x: literal_eval(x) if "[" in x else x)

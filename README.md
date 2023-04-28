@@ -101,4 +101,6 @@ Configure three projects in GCP to be used:
 PoC (proof of concept MVP)
 Supprimer le workload non critique
 Récupérer la réservation et l’associer à un projet cible
-Déployer la prod dans le projet & la nouvelle région up (mettre a jour le DNS) -->
+Déployer la prod dans le projet & la nouvelle région up (mettre a jour le DNS) --> 
+kjhgdsljhckjhck;sdjh;dksjh ;ihjdf;siah oijudsoi fh sdhfdjkshhksjdh;kj fd;kjhfdhfjd;fdjhf ;dshfk;jsadh
+jhsldjbsdkjskjnsdjnfdksjnns kjhgdskjhk duhs sihd HJSD;KA S;SDJ  dsjhf jdfh sjkf dfhjdkfash hjgkjhgjhgjhghhhhhhhhlgljghdfjhggldsjghffljdgfljhdlskfjhgk;jdshgk;jdshk;dsjhg;kdjhgldksjhlkdhs
