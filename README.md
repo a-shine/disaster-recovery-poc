@@ -135,16 +135,18 @@ configuration files.
   single reserved e2-medium instance is being used by the non-critical
   application).
 - Imaginary disaster strikes!
-  - Workload identification and matching process. Run the python main.py
-    specifyinh the disaster region. Obesreve output of worklaod pairs and
-    unmatched critical workloads.
-  - Demonstrate swicthed reservation utilisation during workload migration
+  - Workload identification and matching process. Run the DR dynamic matching
+    process by executing the python `main.py` specifying the disaster region.
+  - Observe output: workload pairs and unmatched critical workloads.
+  - Demonstrate switched reservation utilisation during workload migration
     - Take down non-critical application running in region designated for
-      disaster recovery
+      disaster recovery (simulate a disaster).
     - Migrate the critical application to the disaster recovery region by
-      enabling the tfvars
-    - Show the critical application running
-    - Show 100% reservation utilization
+      uncommenting the recovery regions as specified in the `dummy-critical-app`
+      `terraform.tfvars` file.
+    - Show the critical application running once again, this time in the
+      recovery region.
+    - Show 100% reservation utilisation.
 
 ### Clean-up
 
