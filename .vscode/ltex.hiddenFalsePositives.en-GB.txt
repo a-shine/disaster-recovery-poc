@@ -1,4 +1,0 @@
-{"rule":"OXFORD_SPELLING_Z_NOT_S","sentence":"^\\QThis Proof of Concept (PoC) repository demonstrates how VM reservations can be used to ensure capacity in the event of a disaster while minimising costs.\\E$"}
-{"rule":"OXFORD_SPELLING_Z_NOT_S","sentence":"^\\QThe whole configuration is recorded is present in the customised base image: \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
-{"rule":"OXFORD_SPELLING_Z_NOT_S","sentence":"^\\QThe whole application and configuration is present in the customised base image: \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
-{"rule":"OXFORD_SPELLING_Z_NOT_S","sentence":"^\\QThe whole application and \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q configuration is present in the customised base image: \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}

@@ -2,12 +2,5 @@
   "editor.formatOnSave": true,
   "editor.rulers": [80],
   "cSpell.words": ["Dataframe"],
-  "[markdown]": {
-    "editor.wordWrap": "bounded",
-    "editor.wordWrapColumn": 80
-  },
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
-  },
-  "python.formatting.provider": "none"
+  "cSpell.enableFiletypes": ["!latex", "!markdown"]
 }
