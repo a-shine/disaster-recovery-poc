@@ -18,15 +18,15 @@ available (risk of stockout). This risk is further exasperated during a
 zonal/regional failure as many users are likely to be migrating their workloads
 to neighbouring zones/regions to recover from the disaster.
 
-This justifies the need for reservations, however, reserved GCE capacity is
-billed as full VMs (as the capacity, whether idle or not, is reserved for
-exclusive use). Using reservations, hence, may be out of reach for certain
-businesses, making a robust DRP unachievable.
+This justifies the need for reservations (guaranteed VM slots in a specific
+zone), however, reserved GCE capacity is billed as full VMs (as the capacity,
+whether idle or not, is reserved for exclusive use). Using reservations, hence,
+may be out of reach for certain businesses, making a robust DRP unachievable.
 
 The solution is to show how idle reserved capacity can be utilized by
 non-critical workloads (e.g. dev, staging, pre-production environments) and then
 replaced with critical workloads as part of a Disaster Recovery Plan (DRP).
-Hence, we speak of dynamic reservation utilisation.
+Hence, we speak of *dynamic* reservation utilisation.
 
 This process is similar to Pod priority in Kubernetes where certain workloads
 take precedence over others conditionally (also known as workload
@@ -39,15 +39,14 @@ High-level overview of the DRP process:
 1. Detect disaster and alert (using dual/triple mode redundancy to reduce false
    positives)
 2. Workload matching mechanism - Identifying critical workloads in a disaster
-   region and matching them with non-critical workloads one or more recovery
+   region and matching them with non-critical workloads in one or more recovery
    regions (with reserved capacity)
 3. Workload migration orchestration mechanism
 
-We look to formalise and automate each step (most likely semi-automate as it
-tends to be necessary to have some human validation), then the Recovery Point
-Objective (RPO) and Recovery Time Objective (RTO) can be significantly improved.
-This can enable an organisation to better maintain its service level metrics
-(SLOs, SLAs).
+We look to formalise and automate each step in order to significantly improved
+the Recovery Point Objective (RPO) and Recovery Time Objective (RTO) of a
+critical service. This can enable an organisation to better maintain its service
+level metrics (SLOs, SLAs).
 
 ## The strategy
 
@@ -76,7 +75,7 @@ features on GCP.
 In order to demonstrate how different workloads can be switched to use shared
 reserved capacity, the PoC contains a `dummy-critical-app` which is a Python
 Flask application recording the amount of page views in a `count.txt` file
-(which is there to give a sense of persistent state).
+(which is there to give a sense of working with stateful applications).
 
 The application should run on a VM and be configured as an autostarting process
 (start the application on VM boot). It may be necessary to create a custom image
@@ -87,6 +86,12 @@ an open SSH firewall policy to allow developers to access the machine.
 
 Both application infrastructure is described in their respective Terraform
 configuration files.
+
+The critical application is configured to run in the `europe-west3` region and
+the non-critical application is configured to run in the `europe-west4` region.
+Reservations are made in the europe-west4 region and shared between the two
+projects.
+
 
 ### Setting up GCP environment for the demo
 
@@ -102,28 +107,25 @@ configuration files.
     1. A reservation management project. Similar to shared Committed Use
        Discounts (CUD) management, we typically use an independent project to
        manage all the multi-project reservations in a centralised place.
-    2. Two other projects, for the critical app and the non-critical app.
-       Specify different regions for each of the projects.
+    2. Two other projects, for the critical app (in `europe-west3`) and the
+       non-critical app (`europe-west4`).
 2. Create a shared reservation in the reservation management project between the
    critical and non-critical project. Reserve one Compute Engine instance of
    type `e2-medium` in the zone of the non-critical application. Configure
    reservation to "Use reservation automatically".
-3. Configure the Terraform `variables.tf` in both the `dummy-critical-app` and
-   `dummy-non-crticial-app` with the respective critical and recovery
-   zones/regions.
-4. Update the Terraform `terraform.tfvars` in both the `dummy-critical-app` and
+3. Update the Terraform `terraform.tfvars` in both the `dummy-critical-app` and
    `dummy-non-crticial-app` with the respective Project IDs.
-5. Update the `terraform.tfvars` in the `dummy-critical-app` directory to ensure
+4. Update the `terraform.tfvars` in the `dummy-critical-app` directory to ensure
    the correct recovery regions are configured. Make sure to keep them commented
    out as they will be used later to migrate the critical workload using
    Terraform.
-6. Run `terraform apply` from the `dummy-critical-app` directory to bring up the
+5. Run `terraform apply` from the `dummy-critical-app` directory to bring up the
   application in the default region. Make sure that the recovery regions are
   commented out in the `terraform.tfvars` file. They will be used to migrate the
   workload when disaster strikes!
-7. Run `terraform apply` from the `dummy-non-critical-app` directory to bring up
+6. Run `terraform apply` from the `dummy-non-critical-app` directory to bring up
   the non-critical application.
-8. Overwrite the `example_workload_db.csv` file by adding the necessary
+7. Overwrite the `example_workload_db.csv` file by adding the necessary
    information as specified by each of the column headers.
 
 ### Demo walkthrough
@@ -136,7 +138,8 @@ configuration files.
   application).
 - Imaginary disaster strikes!
   - Workload identification and matching process. Run the DR dynamic matching
-    process by executing the python `main.py` specifying the disaster region.
+    process by executing the python `main.py` specifying the disaster region
+    (`europe-west3`).
   - Observe output: workload pairs and unmatched critical workloads.
   - Demonstrate switched reservation utilisation during workload migration
     - Take down non-critical application running in region designated for
@@ -152,12 +155,3 @@ configuration files.
 
 Run `terraform destroy` for both the `dummy-critical-app` and
 `dummy-non-critical-app`.
-
-## Open questions
-
-- How to prevent people from creating VMs in a region when there is a disaster
-  recovery status?
-  - Turn off automatic reservation in the case of a disaster (hardcode the
-    reservation to be taken on a workload by workload basis)
-  - Rule in the centralized VM management system to prevent creation of VMs in
-    the region where DR is occurring with reservation

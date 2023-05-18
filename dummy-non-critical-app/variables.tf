@@ -6,11 +6,11 @@ variable "gcp_project_id" {
 variable "region" {
   type        = string
   description = "Region of the VM"
-  default     = "[NON_CRITICAL_APP_REGION]"
+  default     = "europe-west4"
 }
 
 variable "zone" {
   type        = string
   description = "Zone of the VM"
-  default     = "[NON_CRITICAL_APP_ZONE]"
+  default     = "europe-west4-a"
 }
